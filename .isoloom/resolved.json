@@ -1,0 +1,144 @@
+{
+  "generated_by_isoloom": "from isoloom.yml; don't edit: change the spec and run `isoloom generate` (`isoloom check` fails when this file is out of date)",
+  "resolved_version": 1,
+  "name": "xben-075-url-bookmarks-yaml",
+  "instance": null,
+  "inputs": [],
+  "networks": {
+    "lab": {
+      "cidr": "10.61.118.0/24",
+      "docker_cidr": "10.61.118.0/24",
+      "internet": false,
+      "gateway": null,
+      "gateway_address": "10.61.118.1",
+      "router": null,
+      "controller": "10.61.118.253"
+    }
+  },
+  "reach": [],
+  "machines": {
+    "deserialization-yaml-bookmarks": {
+      "access": false,
+      "supplied": false,
+      "shapes": [
+        "docker"
+      ],
+      "arch": "amd64",
+      "os": null,
+      "windows": false,
+      "addresses": {
+        "lab": "10.61.118.10"
+      },
+      "docker_addresses": {
+        "lab": "10.61.118.10"
+      },
+      "services": [
+        {
+          "port": 80,
+          "name": "web",
+          "http": true,
+          "publish": 80
+        }
+      ],
+      "depends_on": [],
+      "inputs": [],
+      "volumes": {},
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 512,
+        "disk_gb": 20
+      },
+      "gateway_of": [],
+      "routes": [],
+      "default_gateway": null,
+      "offline": true
+    }
+  },
+  "start_order": [
+    "deserialization-yaml-bookmarks"
+  ],
+  "clones": {},
+  "tools": {},
+  "groups": {},
+  "router": null,
+  "controller": {
+    "addresses": {
+      "lab": "10.61.118.253"
+    }
+  },
+  "published": [
+    {
+      "machine": "deserialization-yaml-bookmarks",
+      "port": 80,
+      "host_port": 80
+    }
+  ],
+  "targets": {
+    "possible": [
+      "docker",
+      "hosted",
+      "docker-vm",
+      "cloud-docker",
+      "kubernetes"
+    ],
+    "generated": [
+      "docker",
+      "hosted",
+      "docker-vm",
+      "cloud-docker",
+      "kubernetes"
+    ],
+    "refused": {},
+    "not_possible": {
+      "hybrid": "only when some machines are containers and others are VMs",
+      "vagrant": "needs `vm:` on deserialization-yaml-bookmarks",
+      "proxmox": "needs `vm:` on deserialization-yaml-bookmarks",
+      "cloud-vm": "needs `vm:` on deserialization-yaml-bookmarks",
+      "external": "needs `external:` on deserialization-yaml-bookmarks"
+    }
+  },
+  "checks": {
+    "default_position": "networks",
+    "positions": [
+      {
+        "position": "networks",
+        "machine": null,
+        "runner": "isoloom-check",
+        "checks": [
+          {
+            "name": "the URL Bookmarks - YAML page answers",
+            "derived": false,
+            "kind": "http",
+            "target": "http://deserialization-yaml-bookmarks:80/list",
+            "expect": "200",
+            "wait": 180
+          },
+          {
+            "name": "the bookmark list hands out its bookmarks cookie",
+            "derived": false,
+            "kind": "script",
+            "target": "checks/probe.sh",
+            "expect": "",
+            "wait": 60
+          }
+        ]
+      },
+      {
+        "position": "deserialization-yaml-bookmarks",
+        "machine": "deserialization-yaml-bookmarks",
+        "runner": "isoloom-check-deserialization-yaml-bookmarks",
+        "checks": [
+          {
+            "name": "no internet from deserialization-yaml-bookmarks",
+            "derived": true,
+            "kind": "http",
+            "target": "http://1.1.1.1/",
+            "expect": "blocked",
+            "wait": 0
+          }
+        ]
+      }
+    ]
+  },
+  "message": "URL Bookmarks - YAML answers at http://localhost:80/.\nThe bookmarks are stored in a cookie. What format is it in, and how is it read back?\n"
+}
